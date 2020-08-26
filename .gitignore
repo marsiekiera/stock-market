@@ -2,3 +2,4 @@ __pycache__/
 venv/include/
 venv/Lib/
 venv/Scripts
+apikey.txt
