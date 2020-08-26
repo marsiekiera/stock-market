@@ -324,12 +324,32 @@ def account():
     return render_template("account.html")
 
 
-@app.route("/password")
+@app.route("/password", methods=["GET", "POST"])
 @login_required
 def password():
-    return render_template("password.html")
+    if request.method == "POST":
+        if not request.form.get("old_password"):
+            return apology("You must provide current password", 400)
+        elif not request.form.get("new_password"):
+            return apology("You must provide new password", 400)
+        elif not request.form.get("confirmation"):
+            return apology("You must re-type new password", 400)
+        elif request.form.get("new_password") != request.form.get("confirmation"):
+            return apology("You must re-type password correct", 400)
+        user_id = session["user_id"]
+        hash_user = db.execute("SELECT hash FROM users WHERE id = ?;", user_id)[0]["hash"]
+        if not check_password_hash(hash_user, request.form.get("old_password")):
+            return apology("You must provide correct current password", 400)
+        else:
+            db.execute("UPDATE users SET hash = ? WHERE id = ?;", generate_password_hash(request.form.get("new_password")), user_id)
+            
+        # Forget any user_id
+        session.clear()
 
-### change password todo
+        # Redirect user to login form
+        return redirect("/")
+    else:
+        return render_template("password.html")
 
 
 @app.route("/delete", methods=["GET", "POST"])
