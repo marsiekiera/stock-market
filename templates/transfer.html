@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Transfer
+{% endblock %}
+
+{% block main %}
+    <form action="/transfer" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="amount" placeholder="Amount" type="text">
+        </div>
+
+        <div class="form-group">
+            <select autocomplete="off" autofocus class="form-control" name="action" type="text">
+                    <option value="" disabled selected>select</option>
+                    <option value="deposit">deposit</option>
+                    <option value="withdraw">withdraw</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Transfer</button>
+    </form>
+{% endblock %}

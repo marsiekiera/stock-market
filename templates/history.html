@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Transacted</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in user_history %}
+                {% if record["stock_symbol"] == "CASH" %}
+                    <tr>
+                        <td>{{ record["stock_symbol"] }}</td>
+                        <td colspan="3"></td>
+                        <td>{{ record["total"] }}</td>
+                        <td>{{ record["date"] }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>{{ record["stock_symbol"] }}</td>
+                        <td>{{ record["stock_name"] }}</td>
+                        <td>{{ record["shares"] }}</td>
+                        <td>{{ record["price"] }}</td>
+                        <td>{{ record["total"] }}</td>
+                        <td>{{ record["date"] }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
