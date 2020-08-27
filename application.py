@@ -108,7 +108,7 @@ def buy():
             db.execute("INSERT INTO stocks (user_id, stock_symbol, stock_name, shares, price, total) VALUES (:user_id, :stock_symbol, :stock_name, :shares, :price, :total);", user_id = user_id, stock_symbol = stock_symbol, stock_name = stock_name, shares = shares, price = stock_price, total = total)
         cash -= total
         db.execute("UPDATE users SET cash = :cash WHERE id = :user_id;", cash=cash, user_id=user_id)
-
+        flash("You have successfully bought stocks.")
         return redirect("/")
     else:
         return render_template("buy.html")
@@ -159,6 +159,7 @@ def login():
         session["username"] = rows[0]["username"]
 
         # Redirect user to home page
+        flash("You were successfully logged in")
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
@@ -174,6 +175,7 @@ def logout():
     session.clear()
 
     # Redirect user to login form
+    flash("You have been successfully logged out.")
     return redirect("/")
 
 
@@ -228,17 +230,12 @@ def register():
         session["username"] = rows[0]["username"]
 
         # Redirect user to home page
+        flash("You have been successfully registered")
         return redirect("/")
-        #return redirect("/register_success")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
-
-#success register added
-@app.route("/register_success")
-def register_success():
-    return render_template("register_success.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
@@ -255,7 +252,6 @@ def sell():
     if request.method == "POST":
         # datetime of transaction
         datetime_transaction = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        #return render_template("test.html", user_stocks=user_stocks, user_stocks_symbol=user_stocks_symbol)
 
         # stock from form to sell
         stock = lookup(request.form.get("symbol"))
@@ -295,6 +291,7 @@ def sell():
             new_total = current_stock[0]["total"] - total
             new_price = new_total / new_shares
             db.execute("UPDATE stocks SET shares = :new_shares, total = :new_total, price = :new_price WHERE (user_id = :user_id AND stock_symbol = :stock_symbol);", new_shares = new_shares, new_total = new_total, new_price = new_price, user_id = user_id, stock_symbol = stock_symbol)
+        flash("You have successfully sold your stocks.")
         return redirect("/")
     else:
         return render_template("sell.html", user_stocks_symbol=user_stocks_symbol)
@@ -311,9 +308,11 @@ def transfer():
         if action == "withdraw":
             db.execute("UPDATE users SET cash = cash - :amount WHERE id = :user_id", amount = amount, user_id = user_id)
             db.execute("INSERT INTO history (user_id, stock_symbol, total, date) VALUES (:user_id, :stock_symbol, :total, :date );", user_id=user_id, stock_symbol = "CASH", total = -amount, date=datetime_transaction)
+            flash("You have successfully withdrawn cash.")
         else:
             db.execute("UPDATE users SET cash = cash + :amount WHERE id = :user_id", amount = amount, user_id = user_id)
             db.execute("INSERT INTO history (user_id, stock_symbol, total, date) VALUES (:user_id, :stock_symbol, :total, :date );", user_id=user_id, stock_symbol = "CASH", total = amount, date=datetime_transaction)
+            flash("You have successfully deposited cash.")
         return redirect("/")
     else:
         return render_template("transfer.html")
@@ -336,6 +335,8 @@ def password():
             return apology("You must re-type new password", 400)
         elif request.form.get("new_password") != request.form.get("confirmation"):
             return apology("You must re-type password correct", 400)
+        elif request.form.get("new_password") == request.form.get("old_password"):
+            return apology("The new password cannot be the same as the old password.", 400)
         user_id = session["user_id"]
         hash_user = db.execute("SELECT hash FROM users WHERE id = ?;", user_id)[0]["hash"]
         if not check_password_hash(hash_user, request.form.get("old_password")):
@@ -347,6 +348,7 @@ def password():
         session.clear()
 
         # Redirect user to login form
+        flash("You have successfully changed your password. Please login again.")
         return redirect("/")
     else:
         return render_template("password.html")
@@ -373,6 +375,7 @@ def delete():
         session.clear()
 
         # Redirect user to login form
+        flash("You have successfully deleted your account.")
         return redirect("/")
     else:
         return render_template("delete.html")
