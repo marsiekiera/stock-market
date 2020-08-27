@@ -61,3 +61,19 @@ def lookup(symbol):
 def usd(value):
     """Format value as USD."""
     return f"${value:,.2f}"
+
+
+def has_number(input_string):
+    return any(char.isdigit() for char in input_string)
+
+
+def has_lower(input_string):
+    return any(char.islower() for char in input_string)
+
+
+def has_upper(input_string):
+    return any(char.isupper() for char in input_string)
+
+
+def has_symbol(input_string):
+    return any(not char.isalnum() for char in input_string)

@@ -8,7 +8,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-from helpers import apology, login_required, lookup, usd
+from helpers import apology, login_required, lookup, usd, has_lower, has_number, has_symbol, has_upper
 
 # Configure application
 app = Flask(__name__)
@@ -218,6 +218,10 @@ def register():
         # Check if password and re-type password are the same
         elif request.form.get("password") != request.form.get("confirmation"):
             return apology("must re-type password", 403)
+        
+        # Check if password have min 1 upper, 1 lower, 1 number and 1 symbol
+        elif not has_number(request.form.get("password")) or not has_symbol(request.form.get("password")) or not has_lower(request.form.get("password")) or not has_upper(request.form.get("password")):
+            return apology("Your password must contain at least one uppercase letter, one lowercase letter, a number and a symbol.", 400)
 
         # Add user to database
         db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash_password)", username=request.form.get("username"), hash_password=generate_password_hash(request.form.get("password")))
@@ -337,6 +341,9 @@ def password():
             return apology("You must re-type password correct", 400)
         elif request.form.get("new_password") == request.form.get("old_password"):
             return apology("The new password cannot be the same as the old password.", 400)
+        elif not has_number(request.form.get("password")) or not has_symbol(request.form.get("password")) or not has_lower(request.form.get("password")) or not has_upper(request.form.get("password")):
+            return apology("Your password must contain at least one uppercase letter, one lowercase letter, a number and a symbol.", 400)
+
         user_id = session["user_id"]
         hash_user = db.execute("SELECT hash FROM users WHERE id = ?;", user_id)[0]["hash"]
         if not check_password_hash(hash_user, request.form.get("old_password")):
