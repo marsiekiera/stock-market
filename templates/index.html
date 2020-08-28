@@ -10,6 +10,8 @@
             <tr>
                 <th>Symbol</th>
                 <th>Name</th>
+                <th>Buy</th>
+                <th>Sell</th>
                 <th>Shares</th>
                 <th>Price</th>
                 <th>Total</th>
@@ -17,7 +19,7 @@
         </thead>
         <tfoot>
             <tr>
-                <td colspan="4"></td>
+                <td colspan="6"></td>
                 <td>{{ total }}</td>
             </tr>
         </tfoot>
@@ -26,6 +28,28 @@
             <tr>
                 <td>{{ record["stock_symbol"] }}</td>
                 <td>{{ record["stock_name"] }}</td>
+                <td>
+                    <form action="/buy" method="post">
+                        <div class="form-group">
+                            <input name="symbol" type="hidden" value="{{ record['stock_symbol'] }}">
+                        </div>
+                        <div class="form-group">
+                            <input autocomplete="off" autofocus class="form-control" min="1" name="shares" placeholder="Shares" type="number">
+                        </div>
+                        <button class="btn btn-primary" type="submit">Buy</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="/sell" method="post">
+                        <div class="form-group">
+                            <input name="symbol" type="hidden" value="{{ record['stock_symbol'] }}">
+                        </div>
+                        <div class="form-group">
+                            <input autocomplete="off" autofocus class="form-control" min="1" name="shares" placeholder="Shares" type="number">
+                        </div>
+                        <button class="btn btn-primary" type="submit">Sell</button>
+                    </form>
+                </td>
                 <td>{{ record["shares"] }}</td>
                 <td>{{ record["price"] }}</td>
                 <td>{{ record["total"] }}</td>
@@ -33,7 +57,7 @@
             {% endfor %}
             <tr>
                 <td>CASH</td>
-                <td colspan="3"></td>
+                <td colspan="5"></td>
                 <td>{{ cash }}</td>
             </tr>
 
