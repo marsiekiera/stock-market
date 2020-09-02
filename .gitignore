@@ -1,9 +1,6 @@
 __pycache__/
-venv/include/
-venv/Lib/
-venv/Scripts
-apikey.txt
 todo.txt
-start_flask.txt
-start_flask
 flask/env
+flask/__pycache__
+flask/app/__pycache__
+.vscode/
