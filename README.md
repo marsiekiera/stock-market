@@ -18,3 +18,8 @@ docker-compose up
 ```
 
 Open browser and go to the [http://127.0.0.1/](http://127.0.0.1/)
+
+To quit use keyboard shortcuts CTRL + C, then command:
+```bash
+docker-compose down
+```
