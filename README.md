@@ -1,12 +1,20 @@
 # stock-market
 
+Stock-market is python, flask, sqlite web application using API.
 
+## Installation
 
-You need docker and docker-compose
+You need [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/).
 
-clone repository
-in terminal use commands:
+Clone the repository and enter the following commands:
+```bash
 cd flask
+```
+```bash
 docker-compose build
+```
+```bash
 docker-compose up
-open browser and go to http://127.0.0.1/
+```
+
+Open browser and go to the [http://127.0.0.1/](http://127.0.0.1/)
