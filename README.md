@@ -17,7 +17,7 @@ docker-compose build
 docker-compose up
 ```
 
-Open browser and go to the [http://127.0.0.1/](http://127.0.0.1/)
+Open browser and go to the [http://127.0.0.1:8084](http://127.0.0.1:8084)
 
 To quit use keyboard shortcuts CTRL + C, then command:
 ```bash
